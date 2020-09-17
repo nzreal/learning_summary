@@ -111,7 +111,7 @@ Function.prototype.newBind = function (context, ...args) {
   const ctx = context || window;
   const fn = this
   return function() {
-    return fn.call(ctx, args ? ...args: undefined)
+    return args? fn.call( ...args): fn.call(ctx)
   }
 };
 ```
