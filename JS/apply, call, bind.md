@@ -107,13 +107,13 @@ class Foo extend PureComponent {
 因此关于其源码实现我们可以理解为 bind 后返回一个函数，函数包裹的是返回该函数调用 call
 
 ```js
-Function.prototype.newBind = function (context, ...args) {
-  const ctx = context || window;
-  const fn = this
-  return function() {
-    return args? fn.call( ...args): fn.call(ctx)
-  }
-};
+Function.prototype.newBind = function (context) {
+   const ctx = context || window
+   const fn = this
+   return function (...args) {
+      return args ? fn.call(ctx, ...args) : fn.call(ctx)
+   }
+}
 ```
 
 当该 bind 后的函数作为构造函数时，会微妙的出现一些问题
