@@ -110,8 +110,10 @@ class Foo extend PureComponent {
 Function.prototype.newBind = function (context) {
    const ctx = context || window
    const fn = this
+   // bind 可接收预定义参数
+   const bindArgs = Array.from(arguments).slice(1)
    return function (...args) {
-      return args ? fn.call(ctx, ...args) : fn.call(ctx)
+      return args ? fn.call(ctx, ...bindArgs, ...args) : fn.call(ctx)
    }
 }
 ```
