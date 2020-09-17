@@ -118,6 +118,10 @@ Function.prototype.newBind = function (context) {
 
 当该 bind 后的函数作为构造函数时，会微妙的出现一些问题
 
+这个时候可以参考我的另一篇文章https://github.com/nzreal/learning_summary/blob/master/JS/class%2C%20new%E6%93%8D%E4%BD%9C%E7%AC%A6.md
+
+因为作为 new 的构造函数时，会把实例的隐式原型链 __proto__ 指向 new 操作符后的构造函数 fn 的原型 prototype ，而 fn 的 prototype 和其指向的函数的 prototype 是不一样的，所以需要把prototype也继承过来
+
 这是《JavaScript Web Application》一书中对 bind()的实现：通过设置一个中转构造函数 fNOP，使绑定后的函数与调用 bind()的函数处于同一原型链上，用 new 操作符调用绑定后的函数，返回的对象也能正常使用 instanceof，因此这是最严谨的 bind()实现。
 
 ```js
