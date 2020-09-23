@@ -69,4 +69,4 @@ class EasyPromise {
 }
 ```
 
-简易版 Promise 完成了，但是 Promise 的链式调用 then 算是 Promise 的精髓之一，以后再来实现
+简易版 Promise 完成了，但是 Promise 的链式调用 then 算是 Promise 的精髓之一，以后再来实现，还有 finally 和 Promise.all 或 Promise.race 待实现
