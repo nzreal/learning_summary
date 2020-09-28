@@ -101,7 +101,7 @@ exports.default = SideMenu;
 好的字面意义上的写法不同, 这里产生的问题就是模块导入没有解析, 那么只要我们在webpack的配置中加上样式导入模块的解析就ok了吧
 
 原来的样式解析(xixi图简便, 写的比较捞, 能用就行)
-```
+```js
 {
    test: /\.css$/,
    exclude: /\.module\.css$/,
@@ -169,7 +169,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
 }
 ```
 
-```
+```js
 {
         // oneOf 只匹配一种规则
         oneOf: [
@@ -196,7 +196,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
 ```
 感天动地, 样式它千呼万唤始出来, 然后我们再来瞅瞅打包文件这娃
 
-```
+```js
 var SideMenu = (function (props) {
     return (react_1.default.createElement("div", { className: basicStyle_less_1.default.sideMenu },
         react_1.default.createElement(TitleBar, null),
