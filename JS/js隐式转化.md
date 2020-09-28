@@ -126,7 +126,7 @@ p.s: 此处也来说一下 null 和 undefined 同为没有继承 prototype 的�
 
 来，我们复习一遍，再去上面搂一眼，若 == 操作符前后的数据类型不一致时会对其进行隐式转换，
 
-如果是对象和数字比较的时候，对象会先 **valueOf()** 获取原始值，再调用对象上的 **toString()** 转化为字符串再调用 Number() 去转化为数字去比较(原型链请参考https://github.com/nzreal/learning_summary/blob/master/JS/%E5%8E%9F%E5%9E%8B%E9%93%BE.md)
+如果是对象和数字比较的时候，对象会先 **valueOf()** 获取原始值，再调用对象上的 **toString()** 转化为字符串再调用 Number() 去转化为数字去比较(原型链请参考https://github.com/nzreal/learning_summary/blob/master/JS/%E5%8E%9F%E5%9E%8B%E9%93%BE.md )
 
 而 **valueOf()** 和 **toString()** 方法都是位于 **Object.prototype** 原型链上的方法，当该对象调用时会先去查找对象内部有没有这个方法，如若没有便会去原型链上查找
 
@@ -149,7 +149,7 @@ if (a == 1 && a == 2 && a == 3) {
 }
 ```
 
-简单明了，用 class 来写也是可以的，毕竟 class 是个语法糖，本质还是对象（详细参考https://github.com/nzreal/learning_summary/blob/master/JS/class%2C%20new%E6%93%8D%E4%BD%9C%E7%AC%A6.md）
+简单明了，用 class 来写也是可以的，毕竟 class 是个语法糖，本质还是对象（详细参考https://github.com/nzreal/learning_summary/blob/master/JS/class%2C%20new%E6%93%8D%E4%BD%9C%E7%AC%A6.md ）
 
 这时就有人要问了你这是 == 号，涉及到隐式转化，如果我要用 === 不就不行了，哼哼哼，那你就大错特错
 用 Object.defineProperty 和 Proxy 也可以实现对内部 getter 的拦截，vue2 和 vue3 响应式原理也是基于此，有兴趣可以去看看，此处不再赘述
