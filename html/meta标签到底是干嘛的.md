@@ -1,5 +1,7 @@
 # meta 标签
 
+## 一些东西有待考据尚未写完
+
 ### 开始我们先说说 meta 标签的作用：
 
 meta 标签是 HTML 标记 head 区的一个辅助标签，它位于 HTML 文档的`<head>`和`<title>`之间（有些也不是在`<head>`和`<title>`之间）。**它提供的信息虽然对用户不可见，但是于浏览器可见**。可以说 meta 标签就是写给浏览器看的
@@ -63,77 +65,285 @@ meta 最常见的无疑是定义 charset Unicode 字符集啦
 
 name 属性主要用于描述网页，对应属性是 content ，以便于搜索引擎机器人查找、分类（目前几乎所有的搜索引擎都使用网上机器人自动查找 meta 值来给网页分类）。
 
+#### keywords 页面关键词
+
 ```html
-<!--页面关键词--->
 <meta
   name="keywords"
   content="个人活动发布，会办app，活动管理，会议管理，社群管理"
 />
+```
 
-<!--页面描述-->
+#### description 页面描述
+
+```html
 <meta
   name="description"
   content="发布个人会议，发布公司会议，我们都可以帮你找到合适的会议地点和参会观众"
 />
+```
 
-<!--网页作者-->
+#### author 网页作者
+
+```html
 <meta name="author" content="nzreal" />
+```
 
-<!--搜索引擎抓取 robots， 是一组使用逗号（，）分割的值，通常有如下几种取值：none，noindex，nofollow，all，index和 follow。默认值是all-->
+#### robots 机器人抓取(搜索引擎爬取)
+
+搜索引擎抓取 robots， 是一组使用逗号（，）分割的值，通常有如下几种取值：none，noindex，nofollow，all，index 和 follow。默认值是 all
+
+信息参数为 all：文件将被检索，且页面上的链接可以被查询；
+信息参数为 none：文件将不被检索，且页面上的链接不可以被查询；
+信息参数为 index：文件将被检索；
+信息参数为 follow：页面上的链接可以被查询；
+信息参数为 noindex：文件将不被检索，但页面上的链接可以被查询；
+信息参数为 nofollow：文件将被检索，但页面上的链接不可以被查询；
+
+```html
 <meta name="robots" content="all" />
+```
 
-<!--禁止 Chrome 浏览器中自动提示翻译-->
+#### google 针对于浏览器的设置
+
+禁止 Chrome 浏览器中自动提示翻译
+
+```html
 <meta name="google" value="notranslate" />
+```
 
-<!--自定义标签：app 版本号说明-->
+#### app-version 版本号说明
+
+```html
 <meta name="app-version" content="1.13.3" />
+```
 
-<!--版权-->
+#### copyright 版权
+
+```html
 <meta name="copyright" content="本网站版权归XX所有" />
+```
 
-<!--一般由编译器自动生成-->
+####　 generator 编写使用编译器
+一般由编译器自动生成
+
+```html
+<!---->
 <meta name="generator" content="你所用的编辑器" />
+```
 
-<!--网站重访 让搜索引擎每隔7天访问一次我们的网页-->
-<meta name="revisit-after" content="7 days" />
-<!--一般来说，网站并不需要使用revisit-after来限制搜索引擎的访问频率。
-而只有当网站数据量非常大，被搜索引擎频繁的抓取，会占用过多的服务器资源，这会影响网站的访问反应速度。在这种情况下，我们并不希望搜索引擎过于频繁抓取网页，一般设置成每隔5—7天来访问抓取一次网页即可
+#### revisit-after 网站重访
+
+content="7 days" 是让搜索引擎每隔 7 天访问一次我们的网页
+
+一般来说，网站并不需要使用 revisit-after 来限制搜索引擎的访问频率。
+而只有当网站数据量非常大，被搜索引擎频繁的抓取，会占用过多的服务器资源，这会影响网站的访问反应速度。在这种情况下，我们并不希望搜索引擎过于频繁抓取网页，一般设置成每隔 5—7 天来访问抓取一次网页即可
 同时限制抓取频率，但不能通过设置它来提高抓取频率
--->
+
+```html
+<meta name="revisit-after" content="7 days" />
 ```
 
 ## 3. http-equiv
 
+http-equiv 顾名思义，相当于 http 的文件头作用，它可以向浏览器传回一些有用的信息，以帮助正确和精确地显示网页内容，与之对应的属性值为 content，content 中的内容其实就是各个参数的变量值。
+
+#### X-UA-Compatible IE8 兼容
+
 ```html
-<!--页面重定向和刷新-->
-<!--数字代表几秒后进行跳转-->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+```
+
+首先，众所周知，IE8 是个神奇的版本，令无数前端开发者抓耳挠腮
+这是个是 IE8 的专用标记，用来指定 IE8 浏览器去模拟某个特定版本的 IE 浏览器的渲染方式（比如 IE6），以此来解决部分兼容问题，例如模拟 IE7 的具体方式如下：
+
+```html
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+```
+
+以上代码告诉 IE 浏览器，无论是否用 DTD 声明文档标准，IE8/9 都会以 IE7 引擎来渲染页面。
+
+但令我好奇的是，此处这个标记后面竟然出现了 chrome 这样的值，难道 IE 也可以模拟 chrome 了？
+
+迅速搜索了一下，才明白原来不是微软增强了 IE，而是谷歌做了个外挂：Google ChromeFrame（谷歌内嵌浏览器框架 GCF）。这个插件可以让用户的 IE 浏览器外不变，但用户在浏览网页时，实际上使用的是 GoogleChrome 浏览器内核，而且支持 IE6、7、8 等多个版本的 IE 浏览器，谷歌这个墙角挖的真给力！
+而上文提到的那个 meta 标记，则是在是安装了 GCF 后，用来指定页面使用 chrome 内核来渲染。
+
+GCF 下载地址:http://code.google.com/intl/zh-CN/chrome/chromeframe/
+
+安装完成后,如果你想对某个页面使用 GCF 进行渲染，只需要在该页面的地址前加上 gcf： 即可，例如：gcf:http://cooleep.com
+
+但是如果想要在开发时指定页面默认首先使用 GCF 进行渲染，如果未安装 GCF 再使用 IE 内核进行渲染，该如何进行呢？
+
+就是使用这个标记。
+
+标记用法：
+
+阅读了下 chrome 的开发文档（http://www.chromium.org/developers/how-tos/chrome-frame-getting-started　，需翻墙），下面来简单讲解一下这个标记的语法。 1.最基本的用法：在页面的头部加入
+
+```html
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+```
+
+用以声明当前页面用 chrome 内核来渲染。
+复杂一些的就是本文一开始看到的用法：
+
+```html
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+```
+
+这样写可以达到的效果是如果安装了 GCF，则使用 GCF 来渲染页面，如果为安装 GCF，则使用最高版本的 IE 内核进行渲染。 2.通过修改 HTTP 头文件的方法来实现让指定的页面使用 GCF 内核进行渲染：
+在 HTTP 的头文件中加入以下信息：X-UA-Compatible: chrome=1
+在 Apache 服务器中，确保 mod_headers 和 mod_setenvif 文件可用，然后在 httpd.conf 中加入以下配置信息：
+
+```httpd.conf
+<IfModule mod_setenvif.c>
+  <IfModule mod_headers.c>
+    BrowserMatch chromeframe gcf Header append X-UA-Compatible "chrome=1"
+    env=gcf
+  </IfModule>
+</IfModule>
+```
+
+在 IIS7 或者更高版本的服务器中，只需要修改 web.config 文件,添加如下信息即可即可:
+
+```
+< configuration >
+< system.webServer >
+< httpProtocol >
+< customHeaders >
+< add name = "X-UA-Compatible" value = "chrome=1" />
+</ customHeaders >
+</ httpProtocol >
+</ system.webServer >
+</ configuration >
+```
+
+#### refresh 页面重定向和刷新
+
+数字代表几秒后进行跳转
+
+```html
 <meta http-equiv="refresh" content="5; url=https://github.com/nzreal" />
+```
 
-<!--指定网页在缓存中的过期时间，一旦网页过期，必须到服务器上重新传输。-->
+expires 网页在缓存中的过期时间
+网页在缓存中的过期时间，一旦网页过期，必须到服务器上重新获取。
+注意：必须使用 GMT 的时间格式，或者直接设为 0（数字表示多久后过期）
+
+```html
 <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT" />
-<!--注意：必须使用GMT的时间格式，或者直接设为0（数字表示多久后过期）-->
+```
 
-<!--禁止浏览器从本地计算机的缓存中访问页面内容。-->
+#### Pragma 缓存标签(已废弃?)
+
+禁止浏览器从本地计算机的缓存中访问页面内容。
+注意：网页不保存在缓存中，每次访问都刷新页面。这样设定，访问者将无法脱机浏览。
+
+```html
+<!---->
 <meta http-equiv="Pragma" content="no-cache" />
-<!--注意：网页不保存在缓存中，每次访问都刷新页面。这样设定，访问者将无法脱机浏览。-->
+<!---->
+```
 
-<!-- Set-Cookie（cookie设定）浏览器访问某个页面时会将它存在缓存中，下次再次访问时就可从缓存中读取，以提高速度。当你希望访问者每次都刷新你广告的图标，或每次都刷新你的计数器，就要禁用缓存了。
-如果网页过期，那么存盘的cookie将被删除。-->
+#### Set-Cookie cookie 设定
+
+Set-Cookie（cookie 设定）浏览器访问某个页面时会将它存在缓存中，下次再次访问时就可从缓存中读取，以提高速度。当你希望访问者每次都刷新你广告的图标，或每次都刷新你的计数器，就要禁用缓存了。
+如果网页过期，那么存盘的 cookie 将被删除。
+注意：必须使用 GMT 的时间格式
+
+```html
+<!---->
 <meta
   http-equiv="Set-Cookie"
   content="cookievalue=xxx; expires=Wednesday, 21-Oct-98 16:14:21 GMT; path=/"
 />
-<!--注意：必须使用GMT的时间格式-->
+<!---->
+```
 
+#### Window-target（显示窗口的设定）
+
+作用是设置页面显示的窗口方式，设置 content="\_top"可以强制网页在当前窗口以独立页面显示，就能禁止自己页面被嵌套在其他网页当中！
+
+content 属性后面的选项一共可以有四种属性值，分别如下：
+
+- top：表示页面以当前整个窗口显示
+- blank： 表示页面以新打开的窗口显示
+- parent：表示页面以父容器或窗口显示，比如，框架嵌套
+- self：表示页面以当前容器或窗口显示，比如，框架嵌套
+
+```html
+<meta http-equiv="Window-target" content="_top" />
+```
+
+#### Cache-Control 缓存控制
+
+Cache-Control 指定请求和响应遵循的缓存机制。在请求消息或响应消息中设置 Cache-Control 并不会修改另一个消息处理过程中的缓存处理过程。请求时的缓存指令包括 no-cache、no-store、max-age、max-stale、min-fresh、on
+
+ly-if-cached，响应消息中的指令包括 public、private、no-cache、no-store、no-transform、must-revalidate、proxy-revalidate、max-age。各个消息中的指令含义如下
+
+- Public 指示响应可被任何缓存区缓存
+- Private 指示对于单个用户的整个或部分响应消息，不能被共享缓存处理。这允许服务器仅仅描述当用户的部分响应消息，此响应消息对于其他用户的请求无效
+- no-cache 指示请求或响应消息不能缓存
+- no-store 用于防止重要的信息被无意的发布。在请求消息中发送将使得请求和响应消息都不使用缓存。
+- max-age 指示客户机可以接收生存期不大于指定时间（以秒为单位）的响应
+- min-fresh 指示客户机可以接收响应时间小于当前时间加上指定时间的响应
+- max-stale 指示客户机可以接收超出超时期间的响应消息。如果指定 max-stale 消息的值，那么客户机可以接收超出超时期指定值之内的响应消息。
+
+```html
 <!---禁止百度转码-->
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 ```
 
-以上都是关于 HTML meta 标签的作用和使用方法，还有很多属性，不过那些对现在的我们来说学这些还有点早。
+#### content-Type（显示字符集的设定）
+
+设定页面使用的字符集
+html4 仍然在使用，html5 请使用 charset 来定义
+
+- meta 标签的 charset 的信息参数如 GB2312 时，代表说明网站是采用的编码是简体中文；
+- meta 标签的 charset 的信息参数如 BIG5 时，代表说明网站是采用的编码是繁体中文；
+- meta 标签的 charset 的信息参数如 iso-2022-jp 时，代表说明网站是采用的编码是日文；
+- meta 标签的 charset 的信息参数如 ks_c_5601 时，代表说明网站是采用的编码是韩文；
+- meta 标签的 charset 的信息参数如 ISO-8859-1 时，代表说明网站是采用的编码是英文；
+- meta 标签的 charset 的信息参数如 UTF-8 时，代表世界通用的语言编码；
+
+```html
+<meta http-equiv="content-Type" content="text/html;charset=utf-8" />
+```
+
+#### content-Language（显示语言的设定）
+
+显示语言
+
+```html
+<meta http-equiv="Content-Language" content="zh-cn" />
+```
+
+#### Content-Script-Type 脚本类型
+
+W3C 网页规范，指明页面中脚本的类型。
+
+```html
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+```
+
+#### imagetoolbar 图片工具栏
+
+指定是否显示图片工具栏，当为 false 代表不显示，当为 true 代表显示。
+该项属性的资料已极少，只支持到 IE6，具体功能属性不看也罢
+大致就是图片大小大于网页可视区域鼠标移到图片上会出现可调整大小的工具栏
+https://www.metatags.org/all-meta-tags-overview/meta-equiv-imagetoolbar/
+
+```html
+<meta http-equiv="imagetoolbar" content="false" />
+```
+
+以上都是关于 HTML meta 标签的作用和使用方法，还有很多属性．
+
+<div style="border-bottom: 1px solid #dcdcdc; margin-bottom: 20px"></div>
 
 再来分享几个著名网站的首页的 meta 文件：
 
-### 京东首页的 meta 设置：
+#### 京东首页的 meta 设置：
 
 ```html
 <meta charset="gbk" />
@@ -149,7 +359,7 @@ name 属性主要用于描述网页，对应属性是 content ，以便于搜索
 />
 ```
 
-### 淘宝首页的 meta 设置：
+#### 淘宝首页的 meta 设置：
 
 ```html
 <meta charset="utf-8" />
@@ -168,7 +378,7 @@ name 属性主要用于描述网页，对应属性是 content ，以便于搜索
 <meta name="keyword" content="" />
 ```
 
-### 优酷首页的 meta 设置：
+#### 优酷首页的 meta 设置：
 
 ```html
 <meta charset="utf-8" />
@@ -188,18 +398,8 @@ name 属性主要用于描述网页，对应属性是 content ，以便于搜索
 />
 ```
 
-除了上面的解释的那些，这在补一个也是常用的 meta 标签里的属性
-
-X-UA-CompatibleIE8 的专用标记，用来指定 IE8 浏览器去模拟某个特定版本的 IE 浏览器的渲染方式，以此来解决部分兼容问题。
-
-```html
-<meta http-equiv="X-UA-Compatible" content="IE=7" />
-```
-
-以上代码告诉 IE 浏览器，无论是否用 DTD 声明文档标准，IE8/9 都会以 IE7 引擎来渲染页面。
-
 通过看到大网站对于 meta 的设置，我们可以看到常用的有：X-UA-Compatible、keywords、description 这三种，我们要好好学会用。
 
-### 参考修改整理自：https://blog.csdn.net/zhangank/article/details/94014629 及 http://www.divcss5.com/html5/h54802.shtml
+##### 参考修改整理自：https://blog.csdn.net/zhangank/article/details/94014629 及 https://blog.csdn.net/ssisse/article/details/51590584
 
-### 这两篇文章写得较全，故转载补充以 mark 来学习，大家可以去看看原文
+##### 这两篇文章写得较全，故转载补充以 mark 来学习，大家可以去看看原文
