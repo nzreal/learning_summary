@@ -121,7 +121,8 @@ name 属性主要用于描述网页，对应属性是 content ，以便于搜索
 <meta name="copyright" content="本网站版权归XX所有" />
 ```
 
-####　 generator 编写使用编译器
+#### generator 使用编译器
+
 一般由编译器自动生成
 
 ```html
@@ -200,7 +201,7 @@ Cache-Control 指定请求和响应遵循的缓存机制。在请求消息或响
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 ```
 
-#### Window-target（显示窗口的设定）
+#### Window-target 显示窗口的设定
 
 作用是设置页面显示的窗口方式，设置 content="\_top"可以强制网页在当前窗口以独立页面显示，就能禁止自己页面被嵌套在其他网页当中！
 
@@ -215,7 +216,7 @@ content 属性后面的选项一共可以有四种属性值，分别如下：
 <meta http-equiv="Window-target" content="_top" />
 ```
 
-#### content-Type（显示字符集的设定）
+#### content-Type 显示字符集的设定
 
 设定页面使用的字符集
 html4 仍然在使用，html5 请使用 charset 来定义
@@ -231,7 +232,7 @@ html4 仍然在使用，html5 请使用 charset 来定义
 <meta http-equiv="content-Type" content="text/html;charset=utf-8" />
 ```
 
-#### content-Language（显示语言的设定）
+#### content-Language 显示语言的设定
 
 显示语言
 
