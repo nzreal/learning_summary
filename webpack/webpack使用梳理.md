@@ -34,7 +34,7 @@ module.export = {
       // loader处
     ],
   },
-}
+};
 ```
 
 ## 1. entry 入口
@@ -52,7 +52,7 @@ module.export = {
 ```js
 module.export = {
   entry: './src/index.js',
-}
+};
 ```
 
 #### 多入口
@@ -67,7 +67,7 @@ module.export = {
     main: './src/index.js',
     vendor: './src/vender.js',
   },
-}
+};
 ```
 
 或者多页面应用
@@ -80,7 +80,7 @@ module.export = {
     page1: './src/page1.js',
     page2: './src/page2.js',
   },
-}
+};
 ```
 
 ## 2. output 出口
@@ -98,7 +98,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.bundle.js',
   },
-}
+};
 ```
 
 **多出口**
@@ -116,7 +116,7 @@ module.export = {
     // filename: '[name].bundle.[hash: 6].js'
     filename: '[name].bundle.js',
   },
-}
+};
 ```
 
 ## 3. loader 文件预处理器
@@ -147,7 +147,7 @@ const config = {
   module: {
     rules: [{ test: /\.txt$/, use: 'raw-loader' }],
   },
-}
+};
 ```
 
 所以无论是 ts，jsx 亦或是 less，sass 甚至是以模块导入的 css 都是由 loader 来进行处理的，
@@ -176,7 +176,7 @@ const config = {
       },
     ],
   },
-}
+};
 ```
 
 ## 4. plugin 插件
@@ -188,8 +188,8 @@ loader 被用于转换某些类型的模块，而插件则可以用于执行范�
 **说人话，plugin 功能较多较全，不像 loader 那般专注于预处理文件**
 
 ```js
-const HtmlWebpackPlugin = require('html-webpack-plugin') // 通过 npm 安装
-const webpack = require('webpack') // 用于访问内置插件
+const HtmlWebpackPlugin = require('html-webpack-plugin'); // 通过 npm 安装
+const webpack = require('webpack'); // 用于访问内置插件
 
 module.export = {
   module: {
@@ -197,10 +197,10 @@ module.export = {
   },
   // hwp 可以直接生成一个html模板或者自己指定模板html的位置，然后会将output的出口文件插入html模板
   plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
-}
+};
 ```
 
-## 3. mode 模式
+## 5. mode 模式
 
 |            选项             |                                                                                                           描述                                                                                                            |
 | :-------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
@@ -240,7 +240,7 @@ module.exports = {
 }
 ```
 
-## 5. devServer 本地服务
+## 6. devServer 本地服务
 
 顾名思义 development-server
 
@@ -256,31 +256,110 @@ module.export = {
     open: true, // 启动完毕后自动打开页面
     compress: true, //gzip压缩
     hot: true, // 开启热模块更新，自动在plugin添加 webpack.HotModuleReplacementPlugin
+    overlay: true, // 开启全局语法报错
+    noInfo: true, // 启动时和每次保存之后，那些显示的 webpack 包(bundle)信息的消息将被隐藏。错误和警告仍然会显示。
+    // 也可以接收一个对象 { warnings: false, errors: true }
     // 在所有响应中添加首部内容：
     headers: {
       'X-Custom-Foo': 'bar',
     },
   },
-}
+};
 ```
 
 ### devServer.proxy 设置反向代理
 
-### devServer.historyApiFallback
+如果你有单独的后端开发服务器 API，并且希望在同域名下发送 API 请求 ，那么代理某些 URL 会很有用。
+
+dev-server 使用了非常强大的 http-proxy-middleware 包。
+
+```js
+module.export = {
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3000',
+      // 替换 /api
+      pathRewrite: { '^/api': '' },
+    },
+  },
+};
+```
+
+有时你不想代理所有的请求。可以基于一个函数的返回值绕过代理。
+
+在函数中你可以访问请求体、响应体和代理选项。必须返回 false 或路径，来跳过代理请求。
+
+例如：对于浏览器请求，你想要提供一个 HTML 页面，但是对于 API 请求则保持代理。你可以这样做：
+
+```js
+module.export = {
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3000',
+      bypass: function (req, res, proxyOptions) {
+        if (req.headers.accept.indexOf('html') !== -1) {
+          console.log('Skipping proxy for browser request.');
+          return '/index.html';
+        }
+      },
+    },
+  },
+};
+```
+
+也可以配置多个代理
+
+```js
+module.export = {
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3000',
+    },
+    '/hehe': {
+      target: 'http://localhost:8080',
+    },
+  },
+};
+```
+
+或者以 context 来接收需转发的请求路径
+
+```js
+module.export = {
+  proxy: [
+    {
+      context: ['/auth', '/api'],
+      target: 'http://localhost:3000',
+    },
+  ],
+};
+```
+
+默认情况下，不接受运行在 HTTPS 上，且使用了无效证书的后端服务器。如果你想要接受，修改配置如下：
+
+```js
+proxy: {
+  "/api": {
+    target: "https://other-server.example.com",
+    secure: false
+  }
+}
+```
+
+### devServer.historyApiFallback history router 设置
 
 当使用 HTML5 History API 时，任意的 404 响应都可能需要被替代为 index.html。
 服务器部署时需于服务器配置文件上配置，如 nginx.conf
 
 ```js
-module.export = {
+
   historyApiFallback: true,
-}
+
 ```
 
 通过传入一个对象，比如使用 rewrites 这个选项，此行为可进一步地控制：
 
 ```js
-module.export = {
   historyApiFallback: {
     rewrites: [
       { from: /^\/$/, to: '/views/landing.html' },
@@ -288,7 +367,6 @@ module.export = {
       { from: /./, to: '/views/404.html' },
     ],
   },
-}
 ```
 
 当路径中使用点(dot)（常见于 Angular），你可能需要使用 disableDotRule：
@@ -298,11 +376,104 @@ module.export = {
   historyApiFallback: {
     disableDotRule: true,
   },
-}
+};
 ```
 
 cli 开启
 
 webpack-dev-server --history-api-fallback
 
-待续...
+### devServer.https https 服务
+
+默认情况下，dev-server 通过 HTTP 提供服务。也可以选择带有 HTTPS 的 HTTP/2 提供服务：
+
+```js
+https: true;
+```
+
+以上设置使用了自签名证书，但是你可以提供自己的：
+
+```js
+https: {
+  key: fs.readFileSync("/path/to/server.key"),
+  cert: fs.readFileSync("/path/to/server.crt"),
+  ca: fs.readFileSync("/path/to/ca.pem"),
+}
+```
+
+## 7. externals 外部扩展
+
+externals 配置选项提供了「从输出的 bundle 中排除依赖」的方法。相反，所创建的 bundle 依赖于那些存在于用户环境(consumer's environment)中的依赖。此功能通常对 library 开发人员来说是最有用的，然而也会有各种各样的应用程序用到它。
+
+简单点，这样做的目的就是将不怎么需要更新的第三方库脱离 webpack 打包，不被打入 bundle 中，从而减少打包时间，但又不影响运用第三方库的方式，例如 import 方式等。
+
+防止将某些 import 的包(package)打包到 bundle 中，而是在运行时(runtime)再去从外部获取这些扩展依赖(external dependencies)。
+例如，从 CDN 引入 jQuery，而不是把它打包：
+
+在模板页面引入
+
+```html
+<script
+  src="https://code.jquery.com/jquery-3.1.0.js"
+  integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="
+  crossorigin="anonymous"
+></script>
+```
+
+**webpack.config.js**
+
+属性名称是 jquery，表示应该排除 import \$ from 'jquery' 中的 jquery 模块。为了替换这个模块，jQuery 的值将被用来检索一个全局的 jQuery 变量。换句话说，当设置为一个字符串时，它将被视为全局的（定义在上面和下面）。
+
+```js
+module.export = {
+  externals: {
+    // 前面为暴露出来的模块名
+    // 后者为去全局搜索的变量
+    jquery: 'jQuery';
+  }
+}
+```
+
+具有外部依赖(external dependency)的 bundle 可以在各种模块上下文(module context)中使用，例如 CommonJS, AMD, 全局变量和 ES2015 模块。外部 library 可能是以下任何一种形式：
+
+- root：可以通过一个全局变量访问 library（例如，通过 script 标签）。
+- commonjs：可以将 library 作为一个 CommonJS 模块访问。
+- commonjs2：和上面的类似，但导出的是 module.exports.default.
+- amd：类似于 commonjs，但使用 AMD 模块系统。
+
+还可以接受以下语法：
+
+#### 字符串数组
+
+```js
+module.exports = {
+  externals: {
+    subtract: ['./math', 'subtract'],
+  },
+};
+```
+
+subtract: ['./math', 'subtract'] 转换为父子结构，其中 ./math 是父模块，而 bundle 只引用 subtract 变量下的子集。该例子会编译成 require('./math').subtract;
+
+#### 对象
+
+<div style="background-color: #FFFFCC; padding: 15px;font-style:italic">
+一个形如 { root, amd, commonjs, ... } 的对象仅允许用于 libraryTarget: 'umd' 这样的配置.它不被允许 用于其它的 library targets 配置值.（ libraryTarget 位于 output 中）
+</div>
+<br>
+
+```js
+module.exports = {
+  externals: {
+    lodash: {
+      commonjs: 'lodash',
+      amd: 'lodash',
+      root: '_', // 指向全局变量
+    },
+  },
+};
+```
+
+此语法用于描述外部 library 所有可用的访问方式。这里 lodash 这个外部 library 可以在 AMD 和 CommonJS 模块系统中通过 lodash 访问，但在全局变量形式下用 \_ 访问。subtract 可以通过全局 math 对象下的属性 subtract 访问（例如 window['math']['subtract']）。
+
+详细参考：https://webpack.docschina.org/configuration/externals/
