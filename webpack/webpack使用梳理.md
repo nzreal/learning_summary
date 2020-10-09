@@ -34,7 +34,7 @@ module.export = {
       // loader处
     ],
   },
-};
+}
 ```
 
 ## 1. entry 入口
@@ -52,7 +52,7 @@ module.export = {
 ```js
 module.export = {
   entry: './src/index.js',
-};
+}
 ```
 
 #### 多入口
@@ -67,7 +67,7 @@ module.export = {
     main: './src/index.js',
     vendor: './src/vender.js',
   },
-};
+}
 ```
 
 或者多页面应用
@@ -80,7 +80,7 @@ module.export = {
     page1: './src/page1.js',
     page2: './src/page2.js',
   },
-};
+}
 ```
 
 ## 2. output 出口
@@ -98,7 +98,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.bundle.js',
   },
-};
+}
 ```
 
 **多出口**
@@ -116,7 +116,7 @@ module.export = {
     // filename: '[name].bundle.[hash: 6].js'
     filename: '[name].bundle.js',
   },
-};
+}
 ```
 
 ## 3. loader 文件预处理器
@@ -147,7 +147,7 @@ const config = {
   module: {
     rules: [{ test: /\.txt$/, use: 'raw-loader' }],
   },
-};
+}
 ```
 
 所以无论是 ts，jsx 亦或是 less，sass 甚至是以模块导入的 css 都是由 loader 来进行处理的，
@@ -176,7 +176,7 @@ const config = {
       },
     ],
   },
-};
+}
 ```
 
 ## 4. plugin 插件
@@ -188,8 +188,8 @@ loader 被用于转换某些类型的模块，而插件则可以用于执行范�
 **说人话，plugin 功能较多较全，不像 loader 那般专注于预处理文件**
 
 ```js
-const HtmlWebpackPlugin = require('html-webpack-plugin'); // 通过 npm 安装
-const webpack = require('webpack'); // 用于访问内置插件
+const HtmlWebpackPlugin = require('html-webpack-plugin') // 通过 npm 安装
+const webpack = require('webpack') // 用于访问内置插件
 
 module.export = {
   module: {
@@ -197,7 +197,7 @@ module.export = {
   },
   // hwp 可以直接生成一个html模板或者自己指定模板html的位置，然后会将output的出口文件插入html模板
   plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
-};
+}
 ```
 
 ## 5. mode 模式
@@ -256,15 +256,17 @@ module.export = {
     open: true, // 启动完毕后自动打开页面
     compress: true, //gzip压缩
     hot: true, // 开启热模块更新，自动在plugin添加 webpack.HotModuleReplacementPlugin
+    inline: true, // 默认为 true 热模块更新信息打印在控制台，该项只有hot 为 true 时作效
+    // false 时，将会在页面头部插入 header 打印信息
     overlay: true, // 开启全局语法报错
-    noInfo: true, // 启动时和每次保存之后，那些显示的 webpack 包(bundle)信息的消息将被隐藏。错误和警告仍然会显示。
     // 也可以接收一个对象 { warnings: false, errors: true }
+    noInfo: true, // 启动时和每次保存之后，那些显示的 webpack 包(bundle)信息的消息将被隐藏。错误和警告仍然会显示。
     // 在所有响应中添加首部内容：
     headers: {
       'X-Custom-Foo': 'bar',
     },
   },
-};
+}
 ```
 
 ### devServer.proxy 设置反向代理
@@ -282,7 +284,7 @@ module.export = {
       pathRewrite: { '^/api': '' },
     },
   },
-};
+}
 ```
 
 有时你不想代理所有的请求。可以基于一个函数的返回值绕过代理。
@@ -298,13 +300,13 @@ module.export = {
       target: 'http://localhost:3000',
       bypass: function (req, res, proxyOptions) {
         if (req.headers.accept.indexOf('html') !== -1) {
-          console.log('Skipping proxy for browser request.');
-          return '/index.html';
+          console.log('Skipping proxy for browser request.')
+          return '/index.html'
         }
       },
     },
   },
-};
+}
 ```
 
 也可以配置多个代理
@@ -319,7 +321,7 @@ module.export = {
       target: 'http://localhost:8080',
     },
   },
-};
+}
 ```
 
 或者以 context 来接收需转发的请求路径
@@ -332,7 +334,7 @@ module.export = {
       target: 'http://localhost:3000',
     },
   ],
-};
+}
 ```
 
 默认情况下，不接受运行在 HTTPS 上，且使用了无效证书的后端服务器。如果你想要接受，修改配置如下：
@@ -376,7 +378,7 @@ module.export = {
   historyApiFallback: {
     disableDotRule: true,
   },
-};
+}
 ```
 
 cli 开启
@@ -388,7 +390,7 @@ webpack-dev-server --history-api-fallback
 默认情况下，dev-server 通过 HTTP 提供服务。也可以选择带有 HTTPS 的 HTTP/2 提供服务：
 
 ```js
-https: true;
+https: true
 ```
 
 以上设置使用了自签名证书，但是你可以提供自己的：
@@ -450,7 +452,7 @@ module.exports = {
   externals: {
     subtract: ['./math', 'subtract'],
   },
-};
+}
 ```
 
 subtract: ['./math', 'subtract'] 转换为父子结构，其中 ./math 是父模块，而 bundle 只引用 subtract 变量下的子集。该例子会编译成 require('./math').subtract;
@@ -471,9 +473,114 @@ module.exports = {
       root: '_', // 指向全局变量
     },
   },
-};
+}
 ```
 
 此语法用于描述外部 library 所有可用的访问方式。这里 lodash 这个外部 library 可以在 AMD 和 CommonJS 模块系统中通过 lodash 访问，但在全局变量形式下用 \_ 访问。subtract 可以通过全局 math 对象下的属性 subtract 访问（例如 window['math']['subtract']）。
 
 详细参考：https://webpack.docschina.org/configuration/externals/
+
+## 8. resolve 解析
+
+#### resolve.alias
+
+创建 import 或 require 的别名，来确保模块引入变得更简单。例如，一些位于 src/ 文件夹下的常用模块：
+
+```js
+module.export = {
+  resolve: {
+    alias: {
+      //替换
+      bootstrap: 'bootstrap/dist/css/bootstrap.css',
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
+}
+// 便可以以此方式导入了
+import * from '@/components'
+```
+
+也可以在给定对象的键后的末尾添加 \$，以表示精准匹配：
+
+```js
+alias: {
+  xyz$: path.resolve(__dirname, 'path/to/file.js')
+}
+```
+
+以下结果
+
+```js
+import Test1 from 'xyz' // 精确匹配，所以 path/to/file.js 被解析和导入
+import Test2 from 'xyz/file.js' // 非精确匹配，触发普通解析
+```
+
+#### resolve.extensions
+
+自动解析确定的扩展。默认值为：
+
+```js
+extensions: ['.js', '.json']
+```
+
+#### resolve.mainFields
+
+当从 npm 包中导入模块时（例如，import \* as D3 from "d3"），此选项将决定在 package.json 中使用哪个字段导入模块。根据 webpack 配置中指定的 target 不同，默认值也会有所不同。
+
+当 target 属性设置为 webworker, web 或者没有指定，默认值为：
+
+```js
+mainFields: ['browser', 'module', 'main']
+```
+
+对于其他任意的 target（包括 node），默认值为：
+
+```js
+mainFields: ['module', 'main']
+```
+
+例如，D3 的 package.json 含有这些字段：
+
+```js
+{
+...
+main: 'build/d3.Node.js',
+browser: 'build/d3.js',
+module: 'index',
+...
+}
+```
+
+这意味着当我们 import \* as D3 from "d3"，实际从 browser 属性解析文件。在这里 browser 属性是最优先选择的，因为它是 mainFields 的第一项。同时，由 webpack 打包的 Node.js 应用程序默认会从 module 字段中解析文件。
+
+#### resolve.mainFiles
+
+解析目录时要使用的文件名。默认：
+
+```js
+mainFiles: ['index']
+```
+
+#### resolve.modules
+
+告诉 webpack 解析模块时应该搜索的目录。
+
+绝对路径和相对路径都能使用，但是要知道它们之间有一点差异。
+
+通过查看当前目录以及祖先路径（即 ./node_modules, ../node_modules 等等），相对路径将类似于 Node 查找 'node_modules' 的方式进行查找。
+
+使用绝对路径，将只在给定目录中搜索。
+
+resolve.modules defaults to:
+
+```js
+modules: ['node_modules']
+```
+
+如果你想要添加一个目录到模块搜索目录，此目录优先于 node_modules/ 搜索：
+
+```js
+modules: [path.resolve(__dirname, 'src'), 'node_modules']
+```
+
+详情查看：https://www.webpackjs.com/configuration/resolve/
