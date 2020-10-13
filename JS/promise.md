@@ -30,7 +30,7 @@ class EasyPromise {
     }
   }
 
-  resolve = (value) => {
+  resolve(value) {
     if (this.status === PENDING) {
       this.status = FULFILLED
       this.value = value
@@ -38,7 +38,7 @@ class EasyPromise {
     }
   }
 
-  rejected = (value) => {
+  rejected(value) {
     if (this.status === PENDING) {
       this.status = REJECTED
       this.value = value
