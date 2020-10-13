@@ -7,63 +7,63 @@ promise 的主要特性，初始状态为 pending，resolve 后为 fulfilled，r
 resolve 后执行 then
 
 ```js
-const PENDING = 'pending';
-const FULFILLED = 'fullFilled';
-const REJECTED = 'rejected';
-const isFunction = (variable) => typeof variable === 'function';
+const PENDING = 'pending'
+const FULFILLED = 'fullFilled'
+const REJECTED = 'rejected'
+const isFunction = (variable) => typeof variable === 'function'
 
 class EasyPromise {
   constructor(executor) {
     if (!isFunction(executor)) {
-      throw new Error('Promise must accept a function as a parameter');
+      throw new Error('Promise must accept a function as a parameter')
     }
 
-    this.status = PENDING;
-    this.value = undefined;
-    this.onResolveCallbacks = [];
-    this.onRejectedCallbacks = [];
-
-    const resolve = (value) => {
-      if (this.status === PENDING) {
-        this.status = FULFILLED;
-        this.value = value;
-        this.onResolveCallbacks.forEach((fn) => fn(this.value));
-      }
-    };
-
-    const rejected = (value) => {
-      if (this.status === PENDING) {
-        this.status = REJECTED;
-        this.value = value;
-        this.onRejectedCallbacks.forEach((fn) => fn(this.value));
-      }
-    };
+    this.status = PENDING
+    this.value = undefined
+    this.onResolveCallbacks = []
+    this.onRejectedCallbacks = []
 
     try {
-      executor(resolve, rejected);
+      executor(this.resolve, this.rejected)
     } catch (err) {
-      rejected(err);
+      rejected(err)
+    }
+  }
+
+  resolve = (value) => {
+    if (this.status === PENDING) {
+      this.status = FULFILLED
+      this.value = value
+      this.onResolveCallbacks.forEach((fn) => fn(this.value))
+    }
+  }
+
+  rejected = (value) => {
+    if (this.status === PENDING) {
+      this.status = REJECTED
+      this.value = value
+      this.onRejectedCallbacks.forEach((fn) => fn(this.value))
     }
   }
 
   then(onFulFilled, onRejected) {
-    onFulFilled = isFunction(onFulFilled) ? onFulFilled : (val) => val;
+    onFulFilled = isFunction(onFulFilled) ? onFulFilled : (val) => val
 
     onRejected = isFunction(onRejected)
       ? onRejected
       : (error) => {
-          throw error;
-        };
+          throw error
+        }
 
     if (this.status === FULFILLED) {
-      onFulFilled(this.value);
+      onFulFilled(this.value)
     } else if (this.status === REJECTED) {
-      onRejected(this.value);
+      onRejected(this.value)
     } else if (this.status === PENDING) {
       // 函数返回的是其结果, 所以then内传入的函数需要再次用函数包裹
       // push(() => onFulFilled(this.value))
-      this.onResolveCallbacks.push(onFulFilled);
-      this.onRejectedCallbacks.push(onRejected);
+      this.onResolveCallbacks.push(onFulFilled)
+      this.onRejectedCallbacks.push(onRejected)
     }
   }
 }
