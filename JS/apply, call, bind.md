@@ -11,11 +11,11 @@ apply，call，bind 这三兄弟大家应该都不陌生，都可以改变函数
 ```js
 // 我常用的检验类型
 const checkType = (target) =>
-  Object.prototype.toString.call(target).slice(8, -1);
+  Object.prototype.toString.call(target).slice(8, -1)
 
 // 遍历伪数组HTMLCollection
-const elements = document.getElementsByClassName('xixi');
-Array.prototype.forEach.call(elements, () => {});
+const elements = document.getElementsByClassName('xixi')
+Array.prototype.forEach.call(elements, () => {})
 ```
 
 不难发现相当多的 call，apply 应用于 prototype 之上，因为定义在原型上的函数可以被实例继承，实例调用函数时 this 便指向该实例(对原型链还抱有疑问，可查看我的原型链图片哦)，因此巨大多数的 prototype 上定义的函数内部实现都是使用 this，因此使用 call 改变 this 指向也就是将 this 指向你传参进入的 target，及用 target 去调用该函数，换句话说也是将该函数定义在 targe 上调用，好了这下原理也懂了
@@ -30,11 +30,11 @@ apply 和 call 皆为即时调用函数，但是传参上有一点小小的区�
 
 ```js
 function fn(a, b) {
-  console.log(a, b);
+  console.log(a, b)
 }
 
-fn.call(null, a, b);
-fn.apply(null, [a, b]);
+fn.call(null, a, b)
+fn.apply(null, [a, b])
 ```
 
 非常明显的 call 一个一个接受参数，而 apply 接收一个数组(伪数组?)
@@ -108,13 +108,13 @@ class Foo extend PureComponent {
 
 ```js
 Function.prototype.newBind = function (context) {
-   const ctx = context || window
-   const fn = this
-   // bind 可接收预定义参数
-   const bindArgs = Array.from(arguments).slice(1)
-   return function (...args) {
-      return args ? fn.call(ctx, ...bindArgs, ...args) : fn.call(ctx)
-   }
+  const ctx = context || window
+  const fn = this
+  // bind 可接收预定义参数
+  const bindArgs = Array.from(arguments).slice(1)
+  return function (...args) {
+    return fn.call(ctx, ...bindArgs, ...(args || []))
+  }
 }
 ```
 
@@ -122,7 +122,7 @@ Function.prototype.newBind = function (context) {
 
 这个时候可以参考我的另一篇文章https://github.com/nzreal/learning_summary/blob/master/JS/class%2C%20new%E6%93%8D%E4%BD%9C%E7%AC%A6.md
 
-因为作为 new 的构造函数时，会把实例的隐式原型链 __proto__ 指向 new 操作符后的构造函数 fn 的原型 prototype ，而 fn 的 prototype 和其指向的函数的 prototype 是不一样的，所以需要把prototype也继承过来
+因为作为 new 的构造函数时，会把实例的隐式原型链 **proto** 指向 new 操作符后的构造函数 fn 的原型 prototype ，而 fn 的 prototype 和其指向的函数的 prototype 是不一样的，所以需要把 prototype 也继承过来
 
 这是《JavaScript Web Application》一书中对 bind()的实现：通过设置一个中转构造函数 fNOP，使绑定后的函数与调用 bind()的函数处于同一原型链上，用 new 操作符调用绑定后的函数，返回的对象也能正常使用 instanceof，因此这是最严谨的 bind()实现。
 
@@ -131,7 +131,7 @@ Function.prototype.newBind = function (context) {
   if (typeof this !== 'function') {
     throw new TypeError(
       'Function.prototype.bind - what is trying to be bound is not callable'
-    );
+    )
   }
 
   const aArgs = Array.from(arguments).slice(1),
@@ -144,17 +144,26 @@ Function.prototype.newBind = function (context) {
         this instanceof fBound ? this : context,
         // 获取调用时(fBound)的传参.bind 返回的函数入参往往是这么传递的
         aArgs.concat(Array.prototype.slice.call(arguments))
-      );
-    };
+      )
+    }
+  /**
+      有同学会不明白此处的 this 为何是 fBound 的实例
+      这个指向调用 fBound 的对象，若是使用 new 操作符，fBound 即为构造函数，
+      在 new 的内部实现中是：
+        1. 新建对象 obj ，将 obj 的 __proto__ 指向构造函数 fBound.prototype 
+        2. 再让 obj 调用该构造函数 fBound ，fBound.call(obj, ...arguments)
+      所以调用 fBound 的就是在 new 中构造的对象即返回的结果，其原型自然是构造函数的原型
+      可以参考我上述的文章
+    **/
   // 维护原型关系
   if (this.prototype) {
     // 当执行Function.prototype.bind()时, this为Function.prototype
     // this.prototype(即Function.prototype.prototype)为undefined
-    fNOP.prototype = this.prototype;
+    fNOP.prototype = this.prototype
   }
   // 下行的代码使fBound.prototype是fNOP的实例,因此
   // 返回的fBound若作为new的构造函数,new生成的新对象作为this传入fBound,新对象的__proto__就是fNOP的实例
-  fBound.prototype = new fNOP();
-  return fBound;
-};
+  fBound.prototype = new fNOP()
+  return fBound
+}
 ```
