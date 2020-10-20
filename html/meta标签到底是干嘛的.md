@@ -162,6 +162,15 @@ http-equiv 顾名思义，相当于 http 的文件头作用，它可以向浏览
 <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT" />
 ```
 
+#### x-dns-prefetch-control 开启 dns 预解析
+
+开启 dns 预解析后，可用 link 引入需要预解析的域名
+
+```html
+<meta http-equiv="x-dns-prefetch-control" content="on" />
+<link rel="dns-prefetch" href="http://bdimg.share.baidu.com" />
+```
+
 #### Pragma 缓存标签
 
 含义是让浏览器不缓存当前页面。但是代理服务器不解析 HTML 内容，一般应用广泛的是用 HTTP 头信息控制缓存。
