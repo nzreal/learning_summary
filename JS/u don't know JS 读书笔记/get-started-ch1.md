@@ -15,7 +15,8 @@ ES6 -> EcmaScript 2015
 - 面向过程
 - 面向对象
 - 函数式
-（...待扩展补充）
+  （...待扩展补充）
+
 #### 历代 JS 版本，更新的兼容性
 
 JS 执行引擎会向后兼容，并偶尔有 break change，但老的引擎不会更新加入新版语法
@@ -43,7 +44,7 @@ JS 执行引擎会向后兼容，并偶尔有 break change，但老的引擎不�
 所以在这一步骤中 V8 引擎还是充当了中间解释器的作用，就像 JVM 之于 JAVA 一般，因此 JS 能够跨平台运行
 那么照理来说 JS 已经是妥妥的解释型语言了，**但是作者给出的结论是 JS 是编译型语言**
 
-曾经的 JS 的的确确是解释型语言（脚本语言），在V8出现之前，所有的 JavaScript 虚拟机所采用的都是解释执行的方式，自上而下、一行接一行的编译执行语句，这是 JavaScript 执行速度过慢的一个主要原因。而 V8 率先引入了**即时编译（JIT）的双轮驱动的设计（混合使用编译器和解释器的技术）**，这是一种权衡策略，混合编译执行和解释执行这两种手段，给 JavaScript 的执行速度带来了极大的提升。
+曾经的 JS 的的确确是解释型语言（脚本语言），在 V8 出现之前，所有的 JavaScript 虚拟机所采用的都是解释执行的方式，自上而下、一行接一行的编译执行语句，这是 JavaScript 执行速度过慢的一个主要原因。而 V8 率先引入了**即时编译（JIT）的双轮驱动的设计（混合使用编译器和解释器的技术）**，这是一种权衡策略，混合编译执行和解释执行这两种手段，给 JavaScript 的执行速度带来了极大的提升。
 
 <div style="text-align: center">
   <img src="../../image/V8Compiler.jpg" >
@@ -61,20 +62,20 @@ JS 执行引擎会向后兼容，并偶尔有 break change，但老的引擎不�
      检查语法结构正确后，仍然需要检查分析语句表达的意义，该步相当复杂
    - 优化并重新生成 JS （此处的优化并非传统编译原理上的优化和生成目标代码）
 2. **V8 引擎处理**，V8 主要有 4 个模块
-   - Parser：词法分析、语法分析、语义分析 -> 生成 AST
+   - Parser：词法分析、语法分析、语义分析 -> 生成 AST 和作用域
    - Ignition：解释器，负责将 AST 转换为 Bytecode，解释执行 Bytecode；同时收集监听收集 TurboFan 优化编译所需的信息，比如函数参数的类型；解释器执行时主要有四个模块，内存中的字节码、寄存器、栈、堆。
-   - TurboFan：compiler，即编译器，利用 Ignition 所收集的热点代码信息，将 Bytecode 转换为优化的汇编代码，执行该段代码时可直接执行机器码 
+   - TurboFan：compiler，即编译器，利用 Ignition 所收集的热点代码信息，将 Bytecode 转换为优化的汇编代码，执行该段代码时可直接执行机器码
    - Orinoco：garbage collector，垃圾回收模块，负责将程序不再需要的内存空间回收。
-  <div>
-    <img src="../../image/V8Module.jfif"/>
-  </div>
+   <div>
+     <img src="../../image/V8Module.jfif"/>
+   </div>
 
-  简单地说，**Parser 将 JS 源码转换为 AST，然后 Ignition 将 AST 转换为 Bytecode，最后 TurboFan 将 Bytecode 转换为经过优化的 Machine Code(实际上是汇编代码)。**
+简单地说，**Parser 将 JS 源码转换为 AST，然后 Ignition 将 AST 转换为 Bytecode，最后 TurboFan 将 Bytecode 转换为经过优化的 Machine Code(实际上是汇编代码)。**
 
- 因此截止目前，JS 相对而言已经无法简单的定性为解释型语言或编译型语言了 
+因此截止目前，JS 相对而言已经无法简单的定性为解释型语言或编译型语言了
 
- `These misinformed claims and criticisms should be set aside. The real reason it matters to have a clear picture on whether JS is interpreted or compiled relates to the nature of how errors are handled. <you dont know JS yet>`
-   
+`These misinformed claims and criticisms should be set aside. The real reason it matters to have a clear picture on whether JS is interpreted or compiled relates to the nature of how errors are handled. <you dont know JS yet>`
+
 这些错误的主张和批评应该被搁置一旁。想要清楚地了解 JS 是解释型语言还是编译型语言，我们可以参考 JS 中的语法错误是如何被抛出的。
 
 编译型语言的语法错误，会在词法分析、语法分析、语义分析过程中被抛出，也就是在真正执行代码之前，而 JS 无论是经过 Webpack Eslint 的语法检查，或是 V8 的解析检查，其错误会在机器码被执行之前抛出，该点同编译型语言一致
@@ -87,7 +88,7 @@ JS 执行引擎会向后兼容，并偶尔有 break change，但老的引擎不�
 4. TurboFan 解释执行字节码，并根据 Ignition 收集的信息优化编译
 5. TurboFan 监听热点代码：
    - 若为热点代码，优化热点代码为二进制的机器代码，下次调用直接执行
-   - 若信息错误，反优化生成的二进制机器代码
+   - 若信息错误如类型错误，反优化生成的二进制机器代码
 
  <div>
     <img src="../../image/V8JSCompile.jfif"/>
@@ -99,6 +100,25 @@ JS 依据其特性结合了解释与编译的优点，既能跨平台运行又�
 
 #### WASM
 
-待续
+WebAssembly 就是运行在 Web 平台上的 Assembly。
 
+Assembly 是指汇编代码，是直接操作 CPU 的指令代码，比如 x86 指令集上的汇编代码有指令集、寄存器、栈等等设计，CPU 根据汇编代码的指导进行运算。汇编代码相当于 CPU 执行的机器码能够转换成的人类适合读的一种语言。
+
+_说白话就是能在 Web 平台中运行其他的语言如 Rust,C++,java,go 等，常用于突破 JS 自身性能瓶颈的 CPU 密集型操作。_
+
+WASM 能够突破性能瓶颈的关键在于它的编译是 AOT（ahead of time），而不是 JIT，在 Parser 编译之前便已经被编译为字节码 ByteCode，且用 c++/rust 等强类型语言编写的 wasm 文件已经是强类型，在优化阶段无需因为类型变更反优化而反复编译反复横跳，在一次编译为机器码后便可以数次执行。
+
+且 WebAssembly 中的内存是手动管理的，虽然增加了开发成本，但是不经过统一的垃圾回收算法也变相增加了性能减少垃圾回收的时耗。
+
+<div style="text-align: center">
+<img src="https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/fd3c55e9-3dda-473b-a76b-0ba4d0e039ad/08-diagram-now01-large-opt.png"/>
+<p>JIT JS 加载</p>
+</div>
+
+<div style="text-align: center">
+<img src="https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/01483767-04a0-4438-be58-f7e6512f1b39/10-diagram-future01-large-opt.png"/>
+<p>WebAssembly 加载</p>
+</div>
 #### Strict Mode
+
+告诉我们写 JS 代码最好的方式，还需配合各种 linter
