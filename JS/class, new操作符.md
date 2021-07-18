@@ -31,13 +31,13 @@ class Hello {
 
 ```js
 function myNew(func) {
-  return function () {
+  return function (...args) {
     // 创建一个新对象且将其隐式原型指向构造函数原型
     let obj = {
       __proto__: func.prototype,
     };
     // 执行构造函数
-    func.call(obj, ...arguments);
+    func.call(obj, ...args);
     // 返回该对象
     return obj;
   };

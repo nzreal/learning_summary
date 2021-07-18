@@ -126,7 +126,7 @@ p.s: 此处也来说一下 null 和 undefined 同为没有继承 prototype 的�
 
 来，我们复习一遍，再去上面搂一眼，若 == 操作符前后的数据类型不一致时会对其进行隐式转换，
 
-如果是对象和数字比较的时候，对象会先 **valueOf()** 获取原始值，再调用对象上的 **toString()** 转化为字符串再调用 Number() 去转化为数字去比较(原型链请参考https://github.com/nzreal/learning_summary/blob/master/JS/%E5%8E%9F%E5%9E%8B%E9%93%BE.md )
+如果是对象和数字比较的时候，对象会先 **valueOf()** 获取原始值，再调用对象上的 **toString()** 转化为字符串再调用 Number() 去转化为数字去比较(原型链请参考 <a href="https://github.com/nzreal/learning_summary/blob/master/JS/%E5%8E%9F%E5%9E%8B%E9%93%BE.md">原型链</a>)
 
 而 **valueOf()** 和 **toString()** 方法都是位于 **Object.prototype** 原型链上的方法，当该对象调用时会先去查找对象内部有没有这个方法，如若没有便会去原型链上查找
 
@@ -171,5 +171,5 @@ function cumulate(a) {
 cumulate(1)(2)(3)...
 ```
 
-一个循环递归的 sum 函数，当执行最后一次时是返回该函数若要进行 + == 等操作时会将函数转为字符串调用
+一个循环递归的 sum 函数，当执行最后一次时是返回该函数若要进行 + == 等操作时会将函数转为数字调用
 toString() 拦截 toString() 方法返回值就可以实现无限累加的效果
