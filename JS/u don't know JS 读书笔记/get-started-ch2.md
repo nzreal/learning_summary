@@ -14,12 +14,16 @@
 声明具有函数提升，函数提升 > 变量提升
 
 ## ===
+
 Object.is 可以视为 “====” 严格中的严格比较
+
 ```js
-Object.is(+0, -0) // false
-Object.is(NaN, NaN) // true
+Object.is(+0, -0); // false
+Object.is(NaN, NaN); // true
 ```
+
 ## ==
+
 a == b 比较的双方若类型不一致则会进行类型隐式转化
 <a href="https://github.com/nzreal/learning_summary/blob/master/JS/js%E9%9A%90%E5%BC%8F%E8%BD%AC%E5%8C%96.md">JS 隐式转化</a>
 
@@ -30,4 +34,5 @@ a == b 比较的双方若类型不一致则会进行类型隐式转化
 扩展：<a href="https://github.com/nzreal/learning_summary/blob/master/JS/class%2C%20new%E6%93%8D%E4%BD%9C%E7%AC%A6.md">class & new 原理</a>
 
 ## Modules & ESM
-还需再读一遍理解...
+
+ESM 模块再被导入实例化之后，任何地方再次 import 引入的都是这一单例
