@@ -1,9 +1,9 @@
-# never, any, unknown
+# never, any, unknown, void
 
-### any
+## any
 
 any 肯定是大家一开始写 ts 最喜欢用的类型了，百无限制
-不过使用了 any 后，用 ts 和使用 js 也就没有了差别
+不过使用了 any 后，用 ts 和使用 js 也就没有了差别，在生产代码中尽量不要使用 any
 
 any 既是顶层类型，又是底部类型，可以理解为一个大区间，包含了所有类型，所有类型既是它的父类型，又是它的子类型
 
@@ -20,7 +20,7 @@ JSON.parse(x: string): any
 
 在 unknown 出来之前就定义了其返回值类型，不然可以是 unknown
 
-### unknown
+## unknown
 
 unknown 同样也是顶部类型，所有类型都是它的子类型
 
@@ -39,7 +39,7 @@ a.toFixed(1); // 不进行断言会报错 Property 'toFixed' does not exist on t
 (a as number).toFixed(2);
 ```
 
-### never
+## never
 
 never 是底部类型，即 never 是所有类型的子类型，never 没有自己的子类型
 
@@ -104,3 +104,26 @@ handleValue({ type: 'baz' });
 ```
 
 检测上述情况中 是否穷举了 All 内部的类型
+
+## void
+
+void 可以说与 any 正好相反，无任何类型，一般使用在函数无返回值时使用
+
+```js
+function hello(): void {
+    console.log("no return value");
+}
+```
+
+同时也可以为变量定义 void 类型，不过只能为它赋予 undefined 、 null （注意，"strictNullChecks": true 时会报错）和 void 类型的值
+
+```js
+let void1: void
+let null1: null = null
+let und1: undefined = undefined
+let void2: void
+
+void1 = void2
+void1 = und1 
+void1 = null1 // Type 'null' is not assignable to type 'void'.
+```
