@@ -1,4 +1,4 @@
-# CH1
+# Get Started - CH1
 
 ## ES 对应 EcmaScript 版本
 
@@ -8,8 +8,8 @@ ES6 -> EcmaScript 2015
 
 ## 并非所有能在 script 中编写的代码都是 JS
 
-像 alert, getCurrentLocation, navigator.getUserMedia 等，并不是 JS 的一部分，
-我们可以称之为 WebApi 或者 BOM ，浏览器提供的对象方法，同样 DOM 也并不是 JS 的一部分
+像 `alert`, `getCurrentLocation`, `navigator.getUserMedia` 等，并不是 JS 的一部分，
+我们可以称之为 `WebApi` 或者 `BOM` ，浏览器提供的对象方法，同样 `DOM` 也并不是 JS 的一部分
 
 ## 浏览器的控制台 dev-tool 虽好用却并不是完全严谨的 JS 执行环境
 
@@ -18,7 +18,8 @@ ES6 -> EcmaScript 2015
 - 面向过程
 - 面向对象
 - 函数式
-  （...待扩展补充）
+
+### TODO: 补充
 
 ## 历代 JS 版本，更新的兼容性
 
@@ -27,7 +28,7 @@ JS 执行引擎会向后兼容，并偶尔有 break change，但老的引擎不�
 
 ## JS 究竟是解释型语言还是编译型语言
 
-`计算机是无法理解和执行高级语言的，它只能直接理解机器语言，所以使用任何高级语言编写的程序若想被计算机运行，都必须将其转换成计算机语言，也就是机器码。`
+> 计算机是无法理解和执行高级语言的，它只能直接理解机器语言，所以使用任何高级语言编写的程序若想被计算机运行，都必须将其转换成计算机语言，也就是机器码。
 
 而现今市面上的主流高级语言以转译为机器码的时机被分成两类
 
@@ -50,7 +51,7 @@ JS 执行引擎会向后兼容，并偶尔有 break change，但老的引擎不�
 曾经的 JS 的的确确是解释型语言（脚本语言），在 V8 出现之前，所有的 JavaScript 虚拟机所采用的都是解释执行的方式，自上而下、一行接一行的编译执行语句，这是 JavaScript 执行速度过慢的一个主要原因。而 V8 率先引入了**即时编译（JIT）的双轮驱动的设计（混合使用编译器和解释器的技术）**，这是一种权衡策略，混合编译执行和解释执行这两种手段，给 JavaScript 的执行速度带来了极大的提升。
 
 <div style="text-align: center">
-  <img src="../../image/V8Compiler.jpg" >
+  <img src="../../../image/V8Compiler.jpg" >
 </div>
 
 我们可以先来看一下一个现代工程中一段 JS 代码是如何被编译且执行的：
@@ -70,16 +71,15 @@ JS 执行引擎会向后兼容，并偶尔有 break change，但老的引擎不�
    - TurboFan：compiler，即编译器，利用 Ignition 所收集的热点代码信息，将 Bytecode 转换为优化的汇编代码，执行该段代码时可直接执行机器码
    - Orinoco：garbage collector，垃圾回收模块，负责将程序不再需要的内存空间回收。
    <div>
-     <img src="../../image/V8Module.jfif"/>
+     <img src="../../../image/V8Module.jfif"/>
    </div>
 
 简单地说，**Parser 将 JS 源码转换为 AST，然后 Ignition 将 AST 转换为 Bytecode，最后 TurboFan 将 Bytecode 转换为经过优化的 Machine Code(实际上是汇编代码)。**
 
 因此截止目前，JS 相对而言已经无法简单的定性为解释型语言或编译型语言了
 
-`These misinformed claims and criticisms should be set aside. The real reason it matters to have a clear picture on whether JS is interpreted or compiled relates to the nature of how errors are handled. <you dont know JS yet>`
-
-这些错误的主张和批评应该被搁置一旁。想要清楚地了解 JS 是解释型语言还是编译型语言，我们可以参考 JS 中的语法错误是如何被抛出的。
+> These misinformed claims and criticisms should be set aside. The real reason it matters to have a clear picture on whether JS is interpreted or compiled relates to the nature of how errors are handled. 《you dont know JS yet》
+> 这些错误的主张和批评应该被搁置一旁。想要清楚地了解 JS 是解释型语言还是编译型语言，我们可以参考 JS 中的语法错误是如何被抛出的。
 
 编译型语言的语法错误，会在词法分析、语法分析、语义分析过程中被抛出，也就是在真正执行代码之前，而 JS 无论是经过 Webpack Eslint 的语法检查，或是 V8 的解析检查，其错误会在机器码被执行之前抛出，该点同编译型语言一致
 
@@ -94,16 +94,17 @@ JS 执行引擎会向后兼容，并偶尔有 break change，但老的引擎不�
    - 若信息错误如类型错误，反优化生成的二进制机器代码
 
  <div>
-    <img src="../../image/V8JSCompile.jfif"/>
+    <img src="../../../image/V8JSCompile.jfif"/>
  </div>
 
-因此，作者将 JS 定性为编译型语言
+因此，作者将 JS 定性为编译型语言。
+
 不过以我的拙见，还是觉得无法轻易定性，甚至无需为 JS 定性
 JS 依据其特性结合了解释与编译的优点，既能跨平台运行又相较于纯解释型更为高效
 
 语言一般只会定义其抽象语义，而不会强制性要求采用某种实现方式。
 
-例如说 C 一般被认为是“编译型语言”，但 C 的解释器也是存在的，例如 Ch。同样，C++也有解释器版本的实现，例如 Cint。
+例如说 C 一般被认为是“编译型语言”，但 C 的解释器也是存在的，例如 Ch。同样，C++ 也有解释器版本的实现，例如 Cint。
 
 一般被称为“解释型语言”的是主流实现为解释器的语言，但并不是说它就无法编译。例如说经常被认为是“解释型语言”的 Scheme 就有好几种编译器实现，其中率先支持 R6RS 规范的大部分内容的是 Ikarus，支持在 x86 上编译 Scheme；它最终不是生成某种虚拟机的字节码，而是直接生成 x86 机器码。
 
