@@ -44,7 +44,7 @@ a.toFixed(1); // 不进行断言会报错 Property 'toFixed' does not exist on t
 never 是底部类型，即 never 是所有类型的子类型，never 没有自己的子类型
 
 ```ts
-type test = number extends never ? true : false; // true
+type test = number extends never ? true : false; // false
 type test2 = unknown extends never ? true : false; // false
 ```
 
